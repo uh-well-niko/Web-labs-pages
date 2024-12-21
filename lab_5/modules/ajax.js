@@ -1,14 +1,20 @@
 class Ajax {
     post(url, callback) {
-        axios.post(url)
+        fetch(url, {
+            method: 'POST'
+        })
             .then(response => {
-                callback(response.data);
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(data => {
+                callback(data);
             })
             .catch(error => {
-                console.error('Error occurred:', error);
-                callback(null);
+                console.error('There has been a problem with your fetch operation:', error);
             });
     }
 }
-
 export const ajax = new Ajax();
